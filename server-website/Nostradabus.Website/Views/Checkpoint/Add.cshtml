@@ -1,0 +1,45 @@
+﻿@model Nostradabus.Website.Models.CheckpointModel
+@using System.Globalization
+@using Nostradabus.BusinessComponents		   
+@{
+    ViewBag.Title = "Add";
+}
+
+<h2>Add</h2>
+
+@using (Html.BeginForm())
+{
+	<div>
+		@Html.LabelFor(m => m.RouteId)
+		@Html.DropDownListFor(m => m.RouteId, RouteComponent.Instance.GetAll().OrderBy(r => r.LineNumber).Select(r => new SelectListItem {Text = r.ToString(), Value = r.ID.ToString(CultureInfo.InvariantCulture), Selected = r.ID == Model.RouteId}), "")
+		@Html.ValidationMessageFor(m => m.RouteId)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.UUID)
+		@Html.EditorFor(m => m.UUID)
+		@Html.ValidationMessageFor(m => m.UUID)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.Latitude)
+		@Html.EditorFor(m => m.Latitude)
+		@Html.ValidationMessageFor(m => m.Latitude)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.Longitude)
+		@Html.EditorFor(m => m.Longitude)
+		@Html.ValidationMessageFor(m => m.Longitude)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.DateTime)
+		@Html.EditorFor(m => m.DateTime)
+		@Html.ValidationMessageFor(m => m.DateTime)
+	</div>
+	
+	<input type="submit" value="Registrar"/>
+	
+	<input type="button" value="Limpiar" onclick="$('select,input[type=text]').val('');"/>
+}

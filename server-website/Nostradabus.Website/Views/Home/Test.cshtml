@@ -1,0 +1,126 @@
+﻿@using System.Globalization
+@using Nostradabus.BusinessComponents
+@using Nostradabus.BusinessEntities
+
+@functions {
+	private static Dictionary<int, DateTime> CalculateArrivalTimes(List<Checkpoint> checkpoints)
+	{
+		var result = new Dictionary<int, DateTime>();
+
+		var currentNextStop = checkpoints.Any() ? checkpoints.First().NextStopIndex : 0;
+
+		for (var i = 0; i < checkpoints.Count; i++)
+		{
+			var checkpoint = checkpoints[i];
+
+			if (currentNextStop != checkpoint.NextStopIndex)
+			{
+				result.Add(currentNextStop, checkpoints[i - 1].DateTime);
+
+				currentNextStop = checkpoint.NextStopIndex;
+			}
+		}
+
+		return result;
+	}
+}
+@{
+	ViewBag.Title = "Test";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<style>
+	.message { width: 80%; padding: 10px;line-height: 20px;font-weight: bold;color: red; }
+	table, table td, table th { border: solid 1px #CCC; } 
+	table thead th { text-align: center; } 
+	table td { padding: 5px; text-align: center; }
+	.success { color: green; }
+	.fail { color: red; }
+</style>
+
+@{
+	const int line = 55;
+	const string branch = "A";
+	const Nostradabus.BusinessEntities.RouteDirection direction = Nostradabus.BusinessEntities.RouteDirection.Return;
+
+	/*
+	const int line = 105;
+	const string branch = "B";
+	const Nostradabus.BusinessEntities.RouteDirection direction = Nostradabus.BusinessEntities.RouteDirection.Going;
+	*/
+
+	var route = RouteComponent.Instance.GetRoute(line, branch, direction);
+
+	var checkpoints = CheckpointComponent.Instance.GetByNextStopFromCache(line, branch, direction, 0, 200).OrderBy(c => c.NextStopIndex).ThenBy(c => c.DateTime).ToList();
+
+	var minNextStop = checkpoints.Min(c => c.NextStopIndex);
+
+	var maxNextStop = checkpoints.Max(c => c.NextStopIndex);
+
+	// calculate arrival times by stop based on the closest checkpoints to each stop
+	var realArrivalByStop = CalculateArrivalTimes(checkpoints);
+
+	for (var i = minNextStop + 1; i <= maxNextStop; i++)
+	{
+		var totalSuccess = 0;
+
+		// calculate estimation time for each stop from "i" stop
+		// using only the checkpoints before that stop
+
+		var checkpointSubSet = checkpoints.Where(c => c.NextStopIndex <= i).OrderBy(c => c.DateTime).ToList();
+
+		var baseTime = checkpointSubSet.Last().DateTime;
+
+		<b>Datos desde la parada @minNextStop hasta @i (baseTime = @baseTime.ToString(CultureInfo.InvariantCulture))</b>
+		<table cellspacing="0">
+			<thead>
+				<tr>
+					<th>Parada</th>
+					<th>Tiempo Estimado</th>
+					<th>Hora Estimada</th>
+					<th>Hora Real</th>
+					<th>Diferencia</th>
+					<th>Resultado</th>
+				</tr>
+			</thead>
+	
+			<tbody>
+				@for (var j = i; j <= maxNextStop; j++)
+	{
+		var estimationResult = new PredictionComponent().CalculateArrivalTime(route, j, checkpointSubSet);
+
+		var timeToArrival = estimationResult.ArrivalTimeByEstimation;
+
+		var estimatedTime = baseTime.Add(timeToArrival);
+
+		var success = false;
+
+		TimeSpan? estimatedError = null;
+
+		if (realArrivalByStop.ContainsKey(j))
+		{
+			estimatedError = realArrivalByStop[j].Subtract(estimatedTime).Duration();
+
+			success = estimatedError.Value.TotalSeconds < 120;
+			if (success)
+			{
+				totalSuccess++;
+			}
+		}
+					
+					<tr>
+						<td>#@j</td>
+						<td>@String.Format("{0} min. {1} seg.", timeToArrival.Minutes, timeToArrival.Seconds)</td>
+						<td>@estimatedTime.TimeOfDay</td>
+						<td>@(realArrivalByStop.ContainsKey(j) ? realArrivalByStop[j].TimeOfDay.ToString() : "Unknown")</td>
+						<td>@(estimatedError.HasValue ? String.Format("{0} min. {1} seg.", estimatedError.Value.Minutes, estimatedError.Value.Seconds) : "Unknown")</td>
+						<td class="@(estimatedError.HasValue ? (success ? "success" : "fail") : "unknown")" >@(estimatedError.HasValue ? (success ? "Acierto" : "Error") : "Unknown")</td>
+					</tr>
+	}
+
+				<tr><td colspan="6">Total Aciertos: @totalSuccess</td></tr>
+			</tbody>
+		</table>
+	}
+}

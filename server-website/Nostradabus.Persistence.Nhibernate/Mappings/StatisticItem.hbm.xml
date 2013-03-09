@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="Nostradabus.BusinessEntities" namespace="Nostradabus.BusinessEntities">
+	<class name="StatisticItem" table="stats_detail">
+		<id name="ID" type="System.Int32" column="id" unsaved-value="0">
+			<generator class="identity"/>
+		</id>
+
+		<many-to-one name="Calculation" class="StatisticCalculation" update="false" insert="true" lazy="false" fetch="join" not-null="true">
+			<column name="stats_calculation_id"></column>
+		</many-to-one>
+		
+		<many-to-one name="Route" class="Route" update="false" insert="true" lazy="false" fetch="join" not-null="true">
+			<column name="route_id"></column>
+		</many-to-one>
+
+		<many-to-one name="DayType" class="DayType" update="false" insert="true" lazy="false" fetch="join" not-null="true">
+			<column name="day_type_id"></column>
+		</many-to-one>
+
+		<many-to-one name="TimeRange" class="TimeRange" update="false" insert="true" lazy="false" fetch="join" not-null="true">
+			<column name="time_range_id"></column>
+		</many-to-one>
+
+		<property name="FromStop" column="from_stop" type="System.Int32" not-null="true"/>
+
+		<property name="TimeToNextStop" column="time_to_next_stop" type="System.Int32" not-null="true"/>
+
+		<property name="Speed" column="speed" type="System.Double" not-null="false"/>
+
+		<property name="Frequency" column="frequency" type="System.Int32" not-null="false"/>
+
+		<property name="SampleCount" column="sample_count" type="System.Int32" not-null="true"/>
+	</class>
+</hibernate-mapping>
+
+

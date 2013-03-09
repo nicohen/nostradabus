@@ -1,0 +1,89 @@
+body
+{
+    font-size: 75%;
+    font-family: Verdana, Tahoma, Arial, "Helvetica Neue", Helvetica, Sans-Serif;
+    color: #232323;
+    background-color: #fff;
+}
+
+/* Styles for basic forms
+-----------------------------------------------------------*/
+
+fieldset 
+{
+    border:1px solid #ddd;
+    padding:0 1.4em 1.4em 1.4em;
+    margin:0 0 1.5em 0;
+}
+
+legend 
+{
+    font-size:1.2em;
+    font-weight: bold;
+}
+
+textarea 
+{
+    min-height: 75px;
+}
+
+.editor-label 
+{
+    margin: 1em 0 0 0;
+}
+
+.editor-field 
+{
+    margin:0.5em 0 0 0;
+}
+
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error
+{
+    color: #ff0000;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+.input-validation-error
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.validation-summary-valid
+{
+    display: none;
+}
+
+
+/* Styles for messages partial
+----------------------------------------------------------*/
+div.errorMessages {
+	border: solid 2px brown;
+	background-color: #FCC;;
+	color: black;
+	margin: 1px;
+	padding-bottom: 0;
+}
+div.errorMessages ul { margin: 2px; }
+div.messages 
+{
+	border: solid 2px darkgreen;
+	background-color: #A6E2A6;
+	color: black;
+	margin: 1px;
+	padding-bottom: 0;
+}
+div.messages ul { margin: 2px; }

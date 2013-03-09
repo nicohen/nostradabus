@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="Nostradabus.BusinessEntities" namespace="Nostradabus.BusinessEntities">
+	<class name="RouteStop" table="route_stop">
+		<composite-id>
+			<key-property name="RouteId" column="route_id" type="System.Int32"/>
+			<key-property name="Stop" column="stop" type="System.Int32"/>
+		</composite-id>
+		<property name="Latitude" column="latitude" type="System.Double" not-null="true"/>
+		<property name="Longitude" column="longitude" type="System.Double" not-null="true"/>
+	</class>
+</hibernate-mapping>
+

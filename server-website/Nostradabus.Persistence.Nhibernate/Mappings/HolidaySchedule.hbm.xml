@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="Nostradabus.BusinessEntities" namespace="Nostradabus.BusinessEntities">
+  <class name="HolidaySchedule" table="holiday_schedule">
+    <id name="ID" type="System.Int32" column="id" unsaved-value="0">
+		<generator class="identity"/>
+    </id>
+    <property name="Date" column="date" type="System.DateTime" not-null="true"/>
+    <property name="Description" column="description" type="System.String"  not-null="false" length="100"/>
+    <property name="Active" column="active" type="System.Boolean" not-null="true"/>
+  </class>
+</hibernate-mapping>

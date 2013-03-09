@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{85BB06D3-219E-4996-96AA-AE8B2F35AAFD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Nostradabus.BusinessEntities</RootNamespace>
+    <AssemblyName>Nostradabus.BusinessEntities</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Device" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\BusinessEntity.cs" />
+    <Compile Include="BusLine.cs" />
+    <Compile Include="Checkpoint.cs" />
+    <Compile Include="Common\Country.cs" />
+    <Compile Include="Common\INameDescripton.cs" />
+    <Compile Include="Common\Language.cs" />
+    <Compile Include="DayType.cs" />
+    <Compile Include="HolidaySchedule.cs" />
+    <Compile Include="Interfaces\IBusinessEntity.cs" />
+    <Compile Include="LineBranch.cs" />
+    <Compile Include="Common\NameDescription.cs" />
+    <Compile Include="Common\Password.cs" />
+    <Compile Include="Common\Range.cs" />
+    <Compile Include="Common\Region.cs" />
+    <Compile Include="Route.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteDirection.cs" />
+    <Compile Include="Common\State.cs" />
+    <Compile Include="RouteStop.cs" />
+    <Compile Include="StatisticCalculation.cs" />
+    <Compile Include="HistoricalCheckpoint.cs" />
+    <Compile Include="StatisticItem.cs" />
+    <Compile Include="TimeRange.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Nostradabus.Common\Nostradabus.Common.csproj">
+      <Project>{D0FDE63E-4137-47A7-BC2B-7602D89788EE}</Project>
+      <Name>Nostradabus.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Nostradabus.Configuration\Nostradabus.Configuration.csproj">
+      <Project>{90F00295-0496-4461-BDCE-4E6690A4560E}</Project>
+      <Name>Nostradabus.Configuration</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
