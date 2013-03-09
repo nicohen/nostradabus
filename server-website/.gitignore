@@ -113,3 +113,9 @@ UpgradeLog*.XML
 # Ignore ReSharper files
 _ReSharper.*
 /Log
+
+/Local.testsettings
+
+/Nostradabus.vsmdi
+
+/TraceAndTestImpact.testsettings
