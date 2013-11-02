@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Nostradabus.BusinessEntities;
+using Nostradabus.Common;
 using Nostradabus.Persistence.Interfaces;
 using Nostradabus.Persistence.Nhibernate.Common;
 using NHibernate.Linq;
@@ -23,6 +24,11 @@ namespace Nostradabus.Persistence.Nhibernate
 										   orderby s.Stop
 										   select s;
 			return query.ToList();
+		}
+
+		public IList<int> GetLinesInBoundingBox(BoundingBox boundingBox)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

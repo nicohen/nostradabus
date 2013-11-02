@@ -168,7 +168,7 @@ namespace Nostradabus.BusinessEntities.Common
 		#region Internal stuff
 		private string ComputeHash(string value)
 		{
-			byte[] bytes = System.Text.Encoding.UTF8.GetBytes(value.ToUpper());
+			byte[] bytes = System.Text.Encoding.ASCII.GetBytes(value);
 
 			return ComputeHash(bytes);
 		}

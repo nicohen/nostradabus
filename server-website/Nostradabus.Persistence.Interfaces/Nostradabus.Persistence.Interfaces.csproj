@@ -56,6 +56,10 @@
       <Project>{85BB06D3-219E-4996-96AA-AE8B2F35AAFD}</Project>
       <Name>Nostradabus.BusinessEntities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Nostradabus.Common\Nostradabus.Common.csproj">
+      <Project>{D0FDE63E-4137-47A7-BC2B-7602D89788EE}</Project>
+      <Name>Nostradabus.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

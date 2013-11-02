@@ -12,8 +12,10 @@ using Nostradabus.Website.Models;
 namespace Nostradabus.Website.Controllers
 {
     public class CheckpointController : Controller
-    {
-        public ActionResult Add()
+	{
+		#region Add
+
+		public ActionResult Add()
         {
         	var model = new CheckpointModel();
 
@@ -44,8 +46,20 @@ namespace Nostradabus.Website.Controllers
 			return View(model);
 		}
 
+		#endregion Add
 
-		#region Provate Methods
+		#region DataEntry
+
+		public ActionResult DataEntry()
+		{
+			var model = new DataEntryModel();
+
+			return View(model);
+		}
+		
+		#endregion Add
+
+		#region Private Methods
 
 		private static Checkpoint ToEntity(CheckpointModel model)
 		{

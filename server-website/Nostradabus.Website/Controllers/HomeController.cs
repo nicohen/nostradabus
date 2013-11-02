@@ -30,6 +30,14 @@ namespace Nostradabus.Website.Controllers
 			
 				if(route != null)
 				{
+					// Perímetro de radio X desde coordenada
+					if (!model.BoundingBox_Coord1.IsUnknown && model.BoundingBox_Radius.HasValue)
+					{
+						var boundingBox = GeoHelper.GetBoundingBox(model.BoundingBox_Coord1, Convert.ToDouble(model.BoundingBox_Radius.Value));
+						model.BoundingBox_ResultMin = boundingBox.MinPoint;
+						model.BoundingBox_ResultMax = boundingBox.MaxPoint;
+					}
+					
 					// Distancia entre coordenadas: coord1, coord2
 					if(!model.DistanceBetweenPoints_Coord1.IsUnknown && !model.DistanceBetweenPoints_Coord2.IsUnknown)
 					{

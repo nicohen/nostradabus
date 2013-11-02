@@ -14,9 +14,51 @@ namespace Nostradabus.Website.Models
 		public string Branch { get; set; }
 
 		public string RouteDirection { get; set; }
-		
+
+		#region Bounding Box for Coordinate
+
+		public string BoundingBox_Coord1String
+		{
+			set
+			{
+				if (string.IsNullOrEmpty(value)) return;
+
+				var coordParts = value.Trim().Split(',');
+
+				if (coordParts.Length == 2)
+				{
+					BoundingBox_Coord1Lat = ParseCoordComponent(coordParts[0]);
+					BoundingBox_Coord1Long = ParseCoordComponent(coordParts[1]);
+				}
+			}
+
+			get { return BoundingBox_Coord1.IsUnknown ? "" : BoundingBox_Coord1.ToString(); }
+		}
+
+		public double? BoundingBox_Coord1Lat { get; set; }
+		public double? BoundingBox_Coord1Long { get; set; }
+
+		public GeoCoordinate BoundingBox_Coord1
+		{
+			get
+			{
+				if (BoundingBox_Coord1Lat.HasValue && BoundingBox_Coord1Long.HasValue)
+					return new GeoCoordinate(BoundingBox_Coord1Lat.Value, BoundingBox_Coord1Long.Value);
+
+				return GeoCoordinate.Unknown;
+			}
+		}
+
+		// meters
+		public int? BoundingBox_Radius { get; set; }
+
+		public GeoCoordinate BoundingBox_ResultMin { get; set; }
+		public GeoCoordinate BoundingBox_ResultMax { get; set; }
+
+		#endregion BoundingBox_Coord1String
+
 		#region Distance Between Points
-		
+
 		public string DistanceBetweenPoints_Coord1String
 		{
 			set

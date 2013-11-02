@@ -57,6 +57,34 @@
 	<br />
 	
 	<fieldset>
+		<legend>Perímetro de distancia X alrededor de la coordenada:</legend>
+		
+		<div class="parameters">
+			<div class="coordinate">
+				<label>Centro:</label>	
+				@Html.EditorFor(m => m.BoundingBox_Coord1String)	
+			</div>
+	
+			<div class="stop">
+				<label>Radio (metros):</label>	
+				@Html.EditorFor(m => m.BoundingBox_Radius)	
+			</div>
+		</div>
+
+		<div class="result">
+		@if (Model.BoundingBox_ResultMin != null)
+		{
+			<span>Min: @Html.Raw(Model.BoundingBox_ResultMin.ToString())</span>
+		}
+		<br/>
+		@if (Model.BoundingBox_ResultMax != null)
+		{
+			<span>Max: @Html.Raw(Model.BoundingBox_ResultMax.ToString())</span>
+		}
+		</div>
+	</fieldset>
+	
+	<fieldset>
 		<legend>Distancia entre coordenadas:</legend>
 		
 		<div class="parameters">

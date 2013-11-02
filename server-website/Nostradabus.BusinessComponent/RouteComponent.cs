@@ -338,6 +338,22 @@ namespace Nostradabus.BusinessComponents
 			return distance + aditionalDistance - substractDistance;
 		}
 
+		public IList<int> GetNearbyLines(GeoCoordinate coordinate)
+		{
+			const int nearbyRadius = 200; // meters
+			
+			// we need a known coordinate, otherwise return empty list
+			if (coordinate.IsUnknown) return new int[]{};
+
+			// calculate a nearby bounding box centered in the coordinate
+			var boundingBox = GeoHelper.GetBoundingBox(coordinate, nearbyRadius);
+
+			// if bounding box is not defined return empty list
+			if(boundingBox == null) return new int[] { };
+
+			return Persistence<IRoutePersistence>().GetLinesInBoundingBox(boundingBox);
+		}
+
 		#endregion Methods
 		
 		#region Private Methods

@@ -6,6 +6,13 @@ namespace Nostradabus.Common
 {
 	public class GeoHelper
 	{
+		// Semi-axes of WGS-84 geoidal reference
+		private const double WGS84_a = 6378137.0; // Major semiaxis [m]
+		private const double WGS84_b = 6356752.3; // Minor semiaxis [m]
+
+		private const Double MilesToKilometers = 1.609344;
+		private const Double MilesToNautical = 0.8684;
+
 		/// <summary>
 		/// Class is used in a calculation to determin cardinal point enumeration values from degrees.
 		/// </summary>
@@ -22,20 +29,8 @@ namespace Nostradabus.Common
 			public Double HighRange;
 		}
 
-		private const Double MilesToKilometers = 1.609344;
-		private const Double MilesToNautical = 0.8684;
-
-		/// <summary>
-		/// Converts degrees to Radians.
-		/// </summary>
-		/// <returns>Returns a radian from degrees.</returns>
-		public static Double ToRadian(Double degree) { return (degree * Math.PI / 180.0); }
-		/// <summary>
-		/// To degress from a radian value.
-		/// </summary>
-		/// <returns>Returns degrees from radians.</returns>
-		public static Double ToDegree(Double radian) { return (radian / Math.PI * 180.0); }
-
+		#region Methods
+		
 		/// <summary>
 		/// Calculates the distance (in meters) between two points of latitude and longitude.
 		/// </summary>
@@ -46,6 +41,47 @@ namespace Nostradabus.Common
 			return coordinate1.GetDistanceTo(coordinate2);
 		}
 
+		/// <summary>
+		/// Calculates a bounding box centered on the given point and within a given distance (halfSide) in meters.
+		/// </summary>
+		/// <returns>Returns the bounding box.</returns>
+		public static BoundingBox GetBoundingBox(GeoCoordinate point, double halfSide)
+		{
+			// Bounding box surrounding the point at given coordinates,
+			// assuming local approximation of Earth surface as a sphere
+			// of radius given by WGS84
+			var lat = ToRadian(point.Latitude);
+			var lon = ToRadian(point.Longitude);
+			
+			// Radius of Earth at given latitude
+			var radius = WGS84EarthRadius(lat);
+			// Radius of the parallel at given latitude
+			var pradius = radius * Math.Cos(lat);
+
+			var latMin = lat - halfSide / radius;
+			var latMax = lat + halfSide / radius;
+			var lonMin = lon - halfSide / pradius;
+			var lonMax = lon + halfSide / pradius;
+
+			return new BoundingBox
+			{
+				MinPoint = new GeoCoordinate { Latitude = ToDegree(latMin), Longitude = ToDegree(lonMin) },
+				MaxPoint = new GeoCoordinate { Latitude = ToDegree(latMax), Longitude = ToDegree(lonMax) }
+			};
+		}
+
+		/// <summary>
+		/// Converts degrees to Radians.
+		/// </summary>
+		/// <returns>Returns a radian from degrees.</returns>
+		public static Double ToRadian(Double degree) { return (degree * Math.PI / 180.0); }
+		
+		/// <summary>
+		/// To degress from a radian value.
+		/// </summary>
+		/// <returns>Returns degrees from radians.</returns>
+		public static Double ToDegree(Double radian) { return (radian / Math.PI * 180.0); }
+		
 		/// <summary>
 		/// Calculates the distance between two points of latitude and longitude.
 		/// Great Link - http://www.movable-type.co.uk/scripts/latlong.html
@@ -73,8 +109,7 @@ namespace Nostradabus.Common
 			return (distance);
 
 		}
-
-
+		
 		// The directional names are also routinely and very conveniently associated with 
 		// the degrees of rotation in the unit circle, a necessary step for navigational 
 		// calculations (derived from trigonometry) and/or for use with Global 
@@ -141,11 +176,34 @@ namespace Nostradabus.Common
 
 			return (ToDegree(Math.Atan2(y, x)) + 360) % 360;
 		}
+		
+		#endregion Methods
+
+		#region Private Methods
+
+		// Earth radius at a given latitude, according to the WGS-84 ellipsoid [m]
+		private static double WGS84EarthRadius(double lat)
+		{
+			// http://en.wikipedia.org/wiki/Earth_radius
+			var An = WGS84_a * WGS84_a * Math.Cos(lat);
+			var Bn = WGS84_b * WGS84_b * Math.Sin(lat);
+			var Ad = WGS84_a * Math.Cos(lat);
+			var Bd = WGS84_b * Math.Sin(lat);
+			return Math.Sqrt((An * An + Bn * Bn) / (Ad * Ad + Bd * Bd));
+		}
+
+		#endregion Private Methods
 	}
 
 	public enum UnitsOfLength { Mile, NauticalMiles, Kilometer }
-// ReSharper disable InconsistentNaming
-	public enum CardinalPoints { N, E, W, S, NE, NW, SE, SW }
-// ReSharper restore InconsistentNaming
 
+	// ReSharper disable InconsistentNaming
+	public enum CardinalPoints { N, E, W, S, NE, NW, SE, SW }
+	// ReSharper restore InconsistentNaming
+
+	public class BoundingBox
+	{
+		public GeoCoordinate MinPoint { get; set; }
+		public GeoCoordinate MaxPoint { get; set; }
+	}        
 }
