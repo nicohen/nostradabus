@@ -1,0 +1,96 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:background="@android:color/black"
+    android:orientation="vertical" >
+    
+	<include layout="@layout/header" />
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Lineas cercanas"
+	        android:textSize="16dip"
+	        android:background="@drawable/apptheme_textfield_default_holo_dark" />
+  	    <Spinner
+	        android:id="@+id/bus_list"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/apptheme_spinner_default_holo_dark" />
+	</LinearLayout>
+
+	<LinearLayout 
+        android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_marginTop="40dp">
+		<TextView 
+		    android:id="@+id/bus_time_left_title"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:visibility="gone"
+			android:textSize="20dip"
+			android:text="El colectivo llegará dentro de:" />
+		<TextView 
+		    android:id="@+id/bus_time_left"
+	        android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center_horizontal"
+			android:textSize="100dip" />
+			    
+	</LinearLayout>
+    
+	<LinearLayout 
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_marginTop="40dp">
+		<Button 
+		    android:id="@+id/me_subi_button"
+		    android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Me subí"
+			android:visibility="gone"
+			android:background="@drawable/apptheme_btn_default_holo_dark" />
+	</LinearLayout>
+	
+    <LinearLayout 
+        android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:visibility="gone"
+		android:gravity="center_horizontal">
+	    <Button
+	        android:id="@+id/button_start"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="17dp"
+	        android:text="Start" />
+	
+	    <Button
+	        android:id="@+id/button_stop"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="17dp"
+	        android:text="Stop" />
+	</LinearLayout>
+	
+	<com.google.android.maps.MapView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:gravity="bottom"
+        android:visibility="gone"
+        android:layout_gravity="bottom"
+        android:apiKey="0DHs1iC94tb2IADRJSWwVFf-tKD0gTYFu1UR8aw"
+        android:clickable="true" />
+	
+</LinearLayout>

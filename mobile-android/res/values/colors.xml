@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue">#015196</color>
+    <color name="green">#BBD23A</color>
+    <color name="light_blue">#52aed3</color>
+    <color name="gray">#eeeeee</color>
+    <color name="gray2">#D7D7D7</color>
+    <color name="gray3">#C2C2C2</color>
+    <color name="gray4">#ACACAC</color>
+    <color name="light_gray">#ededed</color>
+    <color name="medium_gray">#888888</color>
+    <color name="medium_gray2">#b0b0b0</color>
+    <color name="dark_gray">#9b9b9b</color>
+    <color name="darkest_gray">#3e3e3e</color>
+    <color name="text_dark">#3e3e3e</color>
+	<color name="background_gray">#e8e8e8</color>
+	<color name="white">#ffffff</color>
+    <color name="black">#000000</color>	
+    <color name="dark_blue">#1c4a9e</color>	
+    <color name="dark_cobalt">#4c566c</color>	
+    <color name="trasluscent_black">#88000000</color>
+    <color name="light_red">#E0671B</color>	
+    <color name="light_green">#59C4BC</color>
+    <color name="darker_gray">#3C3C3C</color>
+    <color name="blackie">#363636</color>
+    <color name="boton_selected">#353A42</color>
+    <color name="boton_no_selected">#EDF0F1</color>
+    <color name="verde_claro">#59C4BC</color>
+    <color name="verde_p1">#5C6A1A</color>
+    <color name="verde_oscuro">#44938E</color>
+    <color name="gris_menu">#EDEDED</color>
+    <color name="text_orange">#FF6600</color>
+    <color name="text_red">#FF0000</color>
+    <color name="text_green">#008000</color>
+    <color name="back_logo">#F6F6F6</color>
+</resources>
