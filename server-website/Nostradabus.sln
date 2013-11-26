@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostradabus.BusinessComponents", "Nostradabus.BusinessComponent\Nostradabus.BusinessComponents.csproj", "{97DF1DF8-65BE-4DA5-95AD-0E3748E79DD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostradabus.Test", "Nostradabus.Test\Nostradabus.Test.csproj", "{30F9A192-EB75-407B-B7AE-E86314E1DB93}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7892C6B3-7CBA-434D-9A67-E1551F94D98B}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		Nostradabus.vsmdi = Nostradabus.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostradabus.BusinessEntities", "Nostradabus.BusinessEntity\Nostradabus.BusinessEntities.csproj", "{85BB06D3-219E-4996-96AA-AE8B2F35AAFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostradabus.Common", "Nostradabus.Common\Nostradabus.Common.csproj", "{D0FDE63E-4137-47A7-BC2B-7602D89788EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostradabus.Configuration", "Nostradabus.Configuration\Nostradabus.Configuration.csproj", "{90F00295-0496-4461-BDCE-4E6690A4560E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostradabus.Persistence.Interfaces", "Nostradabus.Persistence.Interfaces\Nostradabus.Persistence.Interfaces.csproj", "{E8ABE6B3-36F2-4372-9AFA-558B4CC5DA07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostradabus.Persistence.Nhibernate", "Nostradabus.Persistence.NHibernate\Nostradabus.Persistence.Nhibernate.csproj", "{1CAB0F64-0C8A-40EA-B2F2-E17DC2E1A299}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostradabus.Resources", "Nostradabus.Resources\Nostradabus.Resources.csproj", "{631D4793-8908-4691-B51E-994D771168D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostradabus.Website", "Nostradabus.Website\Nostradabus.Website.csproj", "{1BF3CFC5-2984-4673-865B-6830CAC5AAA5}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Nostradabus.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97DF1DF8-65BE-4DA5-95AD-0E3748E79DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97DF1DF8-65BE-4DA5-95AD-0E3748E79DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97DF1DF8-65BE-4DA5-95AD-0E3748E79DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97DF1DF8-65BE-4DA5-95AD-0E3748E79DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30F9A192-EB75-407B-B7AE-E86314E1DB93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30F9A192-EB75-407B-B7AE-E86314E1DB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30F9A192-EB75-407B-B7AE-E86314E1DB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30F9A192-EB75-407B-B7AE-E86314E1DB93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85BB06D3-219E-4996-96AA-AE8B2F35AAFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85BB06D3-219E-4996-96AA-AE8B2F35AAFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85BB06D3-219E-4996-96AA-AE8B2F35AAFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85BB06D3-219E-4996-96AA-AE8B2F35AAFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0FDE63E-4137-47A7-BC2B-7602D89788EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0FDE63E-4137-47A7-BC2B-7602D89788EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0FDE63E-4137-47A7-BC2B-7602D89788EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0FDE63E-4137-47A7-BC2B-7602D89788EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90F00295-0496-4461-BDCE-4E6690A4560E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90F00295-0496-4461-BDCE-4E6690A4560E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90F00295-0496-4461-BDCE-4E6690A4560E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90F00295-0496-4461-BDCE-4E6690A4560E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8ABE6B3-36F2-4372-9AFA-558B4CC5DA07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8ABE6B3-36F2-4372-9AFA-558B4CC5DA07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8ABE6B3-36F2-4372-9AFA-558B4CC5DA07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8ABE6B3-36F2-4372-9AFA-558B4CC5DA07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CAB0F64-0C8A-40EA-B2F2-E17DC2E1A299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CAB0F64-0C8A-40EA-B2F2-E17DC2E1A299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CAB0F64-0C8A-40EA-B2F2-E17DC2E1A299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CAB0F64-0C8A-40EA-B2F2-E17DC2E1A299}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631D4793-8908-4691-B51E-994D771168D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631D4793-8908-4691-B51E-994D771168D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631D4793-8908-4691-B51E-994D771168D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631D4793-8908-4691-B51E-994D771168D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BF3CFC5-2984-4673-865B-6830CAC5AAA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BF3CFC5-2984-4673-865B-6830CAC5AAA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BF3CFC5-2984-4673-865B-6830CAC5AAA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BF3CFC5-2984-4673-865B-6830CAC5AAA5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

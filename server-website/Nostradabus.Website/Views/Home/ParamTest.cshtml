@@ -1,0 +1,237 @@
+﻿@using Nostradabus.BusinessComponents
+@using Nostradabus.BusinessEntities
+@using Nostradabus.Website.Models
+
+@functions {
+	private static Dictionary<int, DateTime> CalculateArrivalTimes(List<Checkpoint> checkpoints)
+	{
+		var result = new Dictionary<int, DateTime>();
+		
+		var currentNextStop = checkpoints.Any() ? checkpoints.First().NextStopIndex : 0;
+
+		for (var i = 0; i < checkpoints.Count; i++)
+		{
+			var checkpoint = checkpoints[i];
+
+			 if (currentNextStop != checkpoint.NextStopIndex)
+			 {
+				 result.Add(currentNextStop, checkpoints[i - 1].DateTime);
+					
+				 currentNextStop = checkpoint.NextStopIndex;
+			 }
+		 }
+
+		return result;
+	}
+	
+	
+	private static ParamTest TestByConfiguration(Nostradabus.BusinessEntities.Route route, ParamTest conf, PredictionComponent predictionComponent)
+	{
+		predictionComponent.AverageTimeOffsetMinSamples = conf.AverageTimeOffsetMinSamples;
+		predictionComponent.SpeedAverageMaxSamples = conf.SpeedAverageMaxSamples;
+		predictionComponent.SpeedExtrapolationMaxDistance = conf.SpeedExtrapolationMaxDistance;
+		predictionComponent.UseAverageTimeOffsetCoef = conf.UseAverageTimeOffsetCoef;
+		predictionComponent.UseSpeedWeightCoef = conf.UseSpeedWeightCoef;
+		predictionComponent.UseStatistics = conf.UseStatistics;
+
+		var totalSuccess = 0;
+		var totalFailures = 0;
+
+		var timeDifferenceAcum = new TimeSpan(0, 0, 0);
+		var maxTimeDifference = new TimeSpan(0, 0, 0);
+		
+		var checkpointTestLists = CheckpointComponent.Instance.CheckpointTestLists;
+
+		for (var index = 0; index < checkpointTestLists.Length; index++)
+		{
+			// load checkpoints for this test set
+			CheckpointComponent.Instance.ClearCache();
+			for (var j = 0; j < checkpointTestLists[index].Count; j++)
+			{
+				CheckpointComponent.Instance.AddToCache(checkpointTestLists[index][j]);
+			}
+			
+			var checkpoints = CheckpointComponent.Instance.GetByNextStopFromCache(route, 0, 200).OrderBy(c => c.NextStopIndex).ThenBy(c => c.DateTime).ToList();
+
+			var minNextStop = checkpoints.Min(c => c.NextStopIndex);
+
+			var maxNextStop = checkpoints.Max(c => c.NextStopIndex);
+
+			// calculate arrival times by stop based on the closest checkpoints to each stop
+			var realArrivalByStop = CalculateArrivalTimes(checkpoints);
+			
+			for (var i = minNextStop; i <= maxNextStop; i++)
+			{
+				// calculate estimation time for each stop from "i" stop
+				// using only the checkpoints before that stop
+
+				var checkpointSubSet = checkpoints.Where(c => c.NextStopIndex <= i).OrderBy(c => c.DateTime).ToList();
+
+				var baseTime = checkpointSubSet.Last().DateTime;
+
+				for (var j = i; j <= maxNextStop; j++)
+				{
+					var estimationResult = predictionComponent.CalculateArrivalTime(route, j, checkpointSubSet);
+
+					var timeToArrival = estimationResult.ArrivalTimeByEstimation;
+
+					var estimatedTime = baseTime.Add(timeToArrival);
+
+					if (realArrivalByStop.ContainsKey(j))
+					{
+						var estimatedError = realArrivalByStop[j].Subtract(estimatedTime).Duration();
+
+						var success = estimatedError.TotalSeconds < 90;
+						
+						if (success)
+						{
+							totalSuccess++;
+						}
+						else
+						{
+							totalFailures++;
+						}
+
+						timeDifferenceAcum = timeDifferenceAcum.Add(estimatedError);
+						
+						if(estimatedError > maxTimeDifference) maxTimeDifference = estimatedError;
+					}
+				}
+			}
+		}
+
+		conf.SuccessCounter = totalSuccess;
+		conf.FailureCounter = totalFailures;
+		conf.AverageTimeDifference = new TimeSpan(0, 0, Convert.ToInt32(timeDifferenceAcum.TotalSeconds / (totalSuccess + totalFailures)));
+		conf.MaxTimeDifference = maxTimeDifference;
+
+		return conf;
+	}
+
+}
+@{
+    ViewBag.Title = "Param Test";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<style>
+	.message { width: 80%; padding: 10px;line-height: 20px;font-weight: bold;color: red; }
+	table, table td, table th { border: solid 1px #CCC; } 
+	table thead th { text-align: center; } 
+	table td { padding: 5px; text-align: center; }
+	.success { color: green; }
+	.fail { color: red; }
+</style>
+
+@{
+	var results = new List<ParamTest>(550);
+
+	var predictionComponent = new PredictionComponent();
+
+	var route = RouteComponent.Instance.GetById(22); // 105 - B (por Golf) - IDA
+	
+	for (int speedAverageMaxSamples = 4; speedAverageMaxSamples <= 8; speedAverageMaxSamples++)
+	{
+		for (int useSpeedWeightCoef = 0; useSpeedWeightCoef < 2; useSpeedWeightCoef++)
+		{
+			for (int useStatistics = 0; useStatistics < 2; useStatistics++)
+			{
+				if (useStatistics == 1)
+				{
+					for (int speedExtrapolationMaxDistance = 0; speedExtrapolationMaxDistance <= 800; speedExtrapolationMaxDistance = speedExtrapolationMaxDistance + 100)
+					{
+						for (int useAverageTimeOffsetCoef = 0; useAverageTimeOffsetCoef < 2; useAverageTimeOffsetCoef++)
+						{
+							if (useAverageTimeOffsetCoef == 1)
+							{
+								for (int averageTimeOffsetMinSamples = 2; averageTimeOffsetMinSamples <= 6; averageTimeOffsetMinSamples++)
+								{
+									var paramTest = new ParamTest
+									                	{
+									                		AverageTimeOffsetMinSamples = averageTimeOffsetMinSamples,
+									                		SpeedAverageMaxSamples = speedAverageMaxSamples,
+									                		UseAverageTimeOffsetCoef = useAverageTimeOffsetCoef == 1,
+									                		SpeedExtrapolationMaxDistance = speedExtrapolationMaxDistance,
+									                		UseSpeedWeightCoef = useSpeedWeightCoef == 1,
+									                		UseStatistics = useStatistics == 1
+									                	};
+
+									paramTest = TestByConfiguration(route, paramTest, predictionComponent);
+
+									results.Add(paramTest);
+								}
+							}
+							else
+							{
+								var paramTest = new ParamTest
+								                	{
+								                		SpeedAverageMaxSamples = speedAverageMaxSamples,
+								                		UseAverageTimeOffsetCoef = useAverageTimeOffsetCoef == 1,
+								                		SpeedExtrapolationMaxDistance = speedExtrapolationMaxDistance,
+								                		UseSpeedWeightCoef = useSpeedWeightCoef == 1,
+								                		UseStatistics = useStatistics == 1
+								                	};
+
+								paramTest = TestByConfiguration(route, paramTest, predictionComponent);
+
+								results.Add(paramTest);
+							}
+						}
+					}
+				}
+				else
+				{
+					var paramTest = new ParamTest
+					                	{
+					                		SpeedAverageMaxSamples = speedAverageMaxSamples,
+					                		UseSpeedWeightCoef = useSpeedWeightCoef == 1,
+					                		UseStatistics = useStatistics == 1
+					                	};
+
+					paramTest = TestByConfiguration(route, paramTest, predictionComponent);
+
+					results.Add(paramTest);
+				}
+			}
+		}
+	}
+
+	results = results.OrderByDescending(r => r.SuccessCounter).ThenBy(r => r.AverageTimeDifference).ThenBy(r => r.FailureCounter).ThenBy(r => r.MaxTimeDifference).ToList();
+}
+
+<table>
+	<tr>
+		<td>S. Avg Max Samples</td>
+		<td>Use Speed W. Coef</td>
+		<td>Use Stats</td>
+		<td>Speed Extrap. Max Dist</td>
+		<td>Use Avg Offset</td>
+		<td>Avg Offset Min Samples</td>
+		<td>&nbsp;</td>
+		<td>Success</td>
+		<td>Failure</td>
+		<td>Average Error</td>
+		<td>Max Error</td>
+	</tr>
+
+	@for (var i = 0; i < results.Count; i++)
+	{
+	<tr>
+		<td>@results[i].SpeedAverageMaxSamples</td>
+		<td>@results[i].UseSpeedWeightCoef</td>
+		<td>@results[i].UseStatistics</td>
+		<td>@results[i].SpeedExtrapolationMaxDistance</td>
+		<td>@results[i].UseAverageTimeOffsetCoef</td>
+		<td>@results[i].AverageTimeOffsetMinSamples</td>
+		<td>&nbsp;</td>
+		<td>@results[i].SuccessCounter</td>
+		<td>@results[i].FailureCounter</td>
+		<td>@String.Format("{0} hs. {1} min. {2} seg.", results[i].AverageTimeDifference.Hours, results[i].AverageTimeDifference.Minutes, results[i].AverageTimeDifference.Seconds)</td>
+		<td>@String.Format("{0} hs. {1} min. {2} seg.", results[i].MaxTimeDifference.Hours, results[i].MaxTimeDifference.Minutes, results[i].MaxTimeDifference.Seconds)</td>
+	</tr>
+	}
+</table>
+	
+
+	

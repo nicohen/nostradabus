@@ -1,0 +1,245 @@
+﻿@using System.Device.Location
+@using System.Globalization
+@using Nostradabus.Common
+@using Nostradabus.BusinessComponents
+@using Nostradabus.BusinessEntities
+@model Nostradabus.Website.Models.TestsModel
+@{
+	ViewBag.Title = "Tests";
+
+	//StatisticComponent.Instance.CalculateStatistics();
+
+	var selectedRoute = RouteComponent.Instance.GetRoute(Model.Line, Model.Branch, Model.RouteDirection == "going" ? Nostradabus.BusinessEntities.RouteDirection.Going : Nostradabus.BusinessEntities.RouteDirection.Return);
+
+	var checkpointFromRoute = CheckpointComponent.Instance.GetByRouteFromCache(selectedRoute).OrderBy(c => c.DateTime).ToList();
+}
+
+<style>
+	fieldset { padding: 4px; }
+	
+	.parameters { float: left; }
+	.result  
+	{
+		float: left;
+		font-weight: bold;
+		color: green;
+		margin-left: 15px;
+		padding: 5px; 
+	}
+	
+	.coordinate, .stop { margin-left: 20px; }
+	
+	.coordinate label, .stop label { width: 54px;padding: 2px; display: inline-block; }
+	.coordinate input { width: 170px; }
+	.stop input { width: 50px; }
+	
+	.message { width: 80%; padding: 10px;line-height: 20px;font-weight: bold;color: red; }
+	
+	table, table td, table th { border: solid 1px #CCC; } 
+	table thead th { text-align: center; } 
+	
+	table td { padding: 5px; text-align: center; }
+</style>
+
+<h2>@ViewBag.Title</h2>
+
+<div class="message">@Html.Raw(Model.Message)</div>
+
+@using (Html.BeginForm())
+{
+	<div>
+		Seleccione el recorrido para hacer las pruebas: 
+		@Html.DropDownListFor(m => m.Line, RouteComponent.Instance.GetAll().OrderBy(l => l.LineNumber).Select(l => new SelectListItem { Text = l.LineNumber.ToString(CultureInfo.InvariantCulture), Value = l.LineNumber.ToString(CultureInfo.InvariantCulture), Selected = l.LineNumber == Model.Line }))
+		@Html.DropDownListFor(m => m.Branch, new List<String> { "A", "B", "C" }.Select(b => new SelectListItem { Text = b, Value = b, Selected = b == Model.Branch }))
+		@Html.DropDownListFor(m => m.RouteDirection, new List<String> { "Going", "Return" }.Select(d => new SelectListItem { Text = d, Value = d.ToLower(), Selected = d.ToLower() == Model.RouteDirection }))
+	</div>
+
+	<br />
+	
+	<fieldset>
+		<legend>Perímetro de distancia X alrededor de la coordenada:</legend>
+		
+		<div class="parameters">
+			<div class="coordinate">
+				<label>Centro:</label>	
+				@Html.EditorFor(m => m.BoundingBox_Coord1String)	
+			</div>
+	
+			<div class="stop">
+				<label>Radio (metros):</label>	
+				@Html.EditorFor(m => m.BoundingBox_Radius)	
+			</div>
+		</div>
+
+		<div class="result">
+		@if (Model.BoundingBox_ResultMin != null)
+		{
+			<span>Min: @Html.Raw(Model.BoundingBox_ResultMin.ToString())</span>
+		}
+		<br/>
+		@if (Model.BoundingBox_ResultMax != null)
+		{
+			<span>Max: @Html.Raw(Model.BoundingBox_ResultMax.ToString())</span>
+		}
+		</div>
+	</fieldset>
+	
+	<fieldset>
+		<legend>Distancia entre coordenadas:</legend>
+		
+		<div class="parameters">
+			<div class="coordinate">
+				<label>Desde:</label>	
+				@Html.EditorFor(m => m.DistanceBetweenPoints_Coord1String)	
+			</div>
+	
+			<div class="coordinate">
+				<label>Hasta:</label>	
+				@Html.EditorFor(m => m.DistanceBetweenPoints_Coord2String)	
+			</div>
+		</div>
+
+		<div class="result">
+		@if (Model.DistanceBetweenPoints_Result.HasValue){
+			<span>@Html.Raw(Model.DistanceBetweenPoints_Result.Value.ToString(CultureInfo.InvariantCulture)) m.</span>
+		}
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Distancia entre coord y parada:</legend>
+
+		<div class="parameters">
+			<div class="coordinate">
+				<label>Desde:</label>	
+				@Html.EditorFor(m => m.DistanceBetweenPointAndStop_Coord1String)	
+			</div>
+	
+			<div class="stop">
+				<label>Parada:</label>	
+				@Html.EditorFor(m => m.DistanceBetweenPointAndStop_Stop)	
+			</div>
+		</div>
+
+		<div class="result">
+		@if (Model.DistanceBetweenPointAndStop_Result.HasValue){
+			<span>@Html.Raw(Model.DistanceBetweenPointAndStop_Result.Value.ToString(CultureInfo.InvariantCulture)) m.</span>
+		}
+		</div>
+	</fieldset>
+	
+	<fieldset>
+		<legend>Ubicación de parada:</legend>
+
+		<div class="parameters">
+			<div class="stop">
+				<label>Parada:</label>	
+				@Html.EditorFor(m => m.CoordinateOfStop_Stop)	
+			</div>
+		</div>
+
+		<div class="result">
+			@if (Model.CoordinateOfStop_Result != null)
+			{
+				<span>@Html.Raw(Model.CoordinateOfStop_Result.ToString())</span>
+			}
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Parada mas cercana desde:</legend>
+
+		<div class="parameters">
+			<div class="coordinate">
+				<label>Coord:</label>	
+				@Html.EditorFor(m => m.ClosestStop_CoordString)	
+			</div>
+		</div>
+
+		<div class="result">
+		@if (Model.ClosestStop_Result.HasValue){
+			<span>#@Html.Raw(Model.ClosestStop_Result.Value.ToString(CultureInfo.InvariantCulture))</span>
+		}
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Próxima parada desde:</legend>
+
+		<div class="parameters">
+			<div class="coordinate">
+				<label>Coord:</label>	
+				@Html.EditorFor(m => m.NextStop_CoordString)	
+			</div>
+		</div>
+
+		<div class="result">
+		@if (Model.NextStop_Result.HasValue){
+			<span>#@Html.Raw(Model.NextStop_Result.Value.ToString(CultureInfo.InvariantCulture))</span>
+		}
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Distancia entre paradas:</legend>
+
+		<div class="parameters">
+			<div class="stop">
+				<label>Desde:</label>	
+				@Html.EditorFor(m => m.DistanceBetweenStops_Stop1)	
+			</div>
+
+			<div class="stop">
+				<label>Hasta:</label>	
+				@Html.EditorFor(m => m.DistanceBetweenStops_Stop2)	
+			</div>
+		</div>
+
+		<div class="result">
+		@if (Model.DistanceBetweenStops_Result.HasValue){
+			<span>@Html.Raw(Model.DistanceBetweenStops_Result.Value.ToString(CultureInfo.InvariantCulture)) m.</span>
+		}
+		</div>
+	</fieldset>
+	
+	<input type="submit" value="Calcular"/>
+	
+	<input type="button" value="Limpiar" onclick="$('.parameters input').val('');"/>
+}
+
+<hr/>
+
+#Checkpoints @Model.Line @Model.Branch: @checkpointFromRoute.Count <br/>
+
+@{ var currentNextStop = checkpointFromRoute.Any() ? checkpointFromRoute.First().NextStopIndex : 0; }
+
+<table cellspacing="0">
+	<thead>
+		<tr>
+			<th>Parada</th>
+			<th>Coord Parada</th>
+			<th>Coord Checkpoint</th>
+			<th>Hora Checkpoint</th>
+		</tr>	
+	</thead>
+
+	<tbody>
+	@for (var i = 0; i < checkpointFromRoute.Count; i++)
+	{
+		var checkpoint = checkpointFromRoute[i];
+
+		 if (currentNextStop != checkpoint.NextStopIndex)
+		 {
+				<tr>
+					<td>#@currentNextStop</td>
+					<td>@selectedRoute.Stops[currentNextStop]</td>
+					<td>@checkpointFromRoute[i - 1].Coordinate</td>
+					<td>@checkpointFromRoute[i - 1].DateTime.TimeOfDay</td>
+				</tr>
+			 currentNextStop = checkpoint.NextStopIndex;
+		 }
+	}
+	</tbody>
+	
+</table>
+

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="Nostradabus.BusinessEntities" namespace="Nostradabus.BusinessEntities">
+	<class name="Route" table="route">
+		<id name="ID" type="System.Int32" column="id" unsaved-value="0">
+			<generator class="identity"/>
+		</id>
+		<property name="LineNumber" column="line_number" type="System.Int32" not-null="true"/>
+		<property name="BranchCode" column="branch" type="System.String" not-null="false"/>
+		
+		<property name="RouteDirection" column="direction" type="NHibernate.Type.EnumStringType`1[[Nostradabus.BusinessEntities.RouteDirection, Nostradabus.BusinessEntities]], NHibernate" not-null="true"/>
+		
+		<property name="Name" column="description" type="System.String" not-null="false"/>
+	</class>
+
+	<sql-query name="GetLinesInBoundingBox">
+		<query-param name="MinLatitude" type="Double"/>
+		<query-param name="MinLongitude" type="Double"/>
+		<query-param name="MaxLatitude" type="Double"/>
+		<query-param name="MaxLongitude" type="Double"/>
+	
+		<![CDATA[
+		SELECT * FROM route_stop 
+		WHERE 
+			latitude >= min_latitude AND 
+			latitude <= max_latitude AND 
+			longitude >= min_longitude AND 
+			longitude <= max_longitude
+		]]>
+	</sql-query>
+</hibernate-mapping>
+

@@ -1,0 +1,30 @@
+﻿@using Nostradabus.Website.Models
+
+@if(Model != null && Model is BaseViewModel)
+{
+	var baseViewModel = Model as BaseViewModel;
+
+	if (baseViewModel.ErrorMessages != null && baseViewModel.ErrorMessages.Any())
+	{
+		<div class="errorMessages">
+			<ul>
+				@foreach(var message in baseViewModel.ErrorMessages)
+				{
+					<li>@Html.Raw(message)</li>
+				}
+			</ul>
+		</div>
+	}
+
+	if (baseViewModel.Messages != null && baseViewModel.Messages.Any())
+	{
+		<div class="messages">
+			<ul>
+				@foreach(var message in baseViewModel.Messages)
+				{
+					<li>@Html.Raw(message)</li>
+				}
+			</ul>
+		</div>
+	}
+}

@@ -1,0 +1,63 @@
+﻿@model Nostradabus.Website.Models.DataEntryModel
+@using System.Globalization
+@using Nostradabus.BusinessComponents
+@{
+	ViewBag.Title = "Mobile Data Entry";
+}
+
+<h2>Mobile Data Entry Simulation</h2>
+
+@using (Html.BeginForm("Checkpoint", "Mobile"))
+{
+	<div>
+		@Html.LabelFor(m => m.serialNumber)
+		@Html.EditorFor(m => m.serialNumber)
+		@Html.ValidationMessageFor(m => m.serialNumber)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.line)
+		@Html.EditorFor(m => m.line)
+		@Html.ValidationMessageFor(m => m.line)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.latitude)
+		@Html.EditorFor(m => m.latitude)
+		@Html.ValidationMessageFor(m => m.latitude)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.longitude)
+		@Html.EditorFor(m => m.longitude)
+		@Html.ValidationMessageFor(m => m.longitude)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.datetime)
+		@Html.EditorFor(m => m.datetime)
+		@Html.ValidationMessageFor(m => m.datetime)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.keyCode)
+		@Html.EditorFor(m => m.keyCode)
+		@Html.ValidationMessageFor(m => m.keyCode)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.speed)
+		@Html.EditorFor(m => m.speed)
+		@Html.ValidationMessageFor(m => m.speed)
+	</div>
+	
+	<div>
+		@Html.LabelFor(m => m.batteryStatus)
+		@Html.EditorFor(m => m.batteryStatus)
+		@Html.ValidationMessageFor(m => m.batteryStatus)
+	</div>
+	
+	<input type="submit" value="Registrar"/>
+	
+	<input type="button" value="Limpiar" onclick="$('select,input[type=text]').val('');"/>
+}

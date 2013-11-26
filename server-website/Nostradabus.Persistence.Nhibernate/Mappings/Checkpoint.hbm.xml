@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="Nostradabus.BusinessEntities" namespace="Nostradabus.BusinessEntities">
+	<class name="Checkpoint" table="checkpoint_daily">
+		<id name="ID" type="System.Int32" column="id" unsaved-value="0">
+			<generator class="identity"/>
+		</id>
+		<many-to-one name="Route" class="Route" update="false" insert="true" lazy="false" fetch="join" not-null="true">
+			<column name="route_id"></column>
+		</many-to-one>
+		<property name="UUID" column="uuid" type="System.String" not-null="false"/>
+		<property name="Latitude" column="latitude" type="System.Double" not-null="true"/>
+		<property name="Longitude" column="longitude" type="System.Double" not-null="true"/>
+		<property name="NextStopIndex" column="next_stop" type="System.Int32" not-null="true"/>
+		<property name="DateTime" column="date" type="System.DateTime" not-null="true"/>
+	</class>
+</hibernate-mapping>
