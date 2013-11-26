@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="STSClose">Cerrar</string>
+	<string name="STSError">Error</string>
+	<string name="STSInvalidSessionToken">Su sesión ha finalizado o no es válida. Por favor, ingrese nuevamente.</string>
+	<string name="STSServersUnreachable">Ha perdido la conexión. Verifique su conexión a Internet y vuelva a intentarlo.</string>
+	<string name="STSErrorCantConnectToServer">Ocurrió un error al intentar conectarse a los servidores centrales. Esto puede suceder si usted no posee una conexión activa a Internet en este momento. Por favor, inténtelo de nuevo en unos minutos.</string>
+	<string name="STSErrorUnknown">Error desconocido, por favor, inténtelo de nuevo en unos minutos.</string>
+	<string name="STSErrorInvalidServerResponse">El servidor devolvió una respuesta no válida, por favor, inténtelo de nuevo en unos minutos.</string>
+	<string name="STSActivateLocation">Para el correcto uso de la aplicación, es necesario activar:\n- GPS\n- Wi-Fi\n- Conexión de datos</string>
+    
+    
     <string name="app_name">Nostradabus</string>
+    <string name="lbl_loading_bus_list">Cargando buses...</string>
+    <string name="lbl_loading_bus_time">Consultando a Nostradabus...</string>
 </resources>
