@@ -48,6 +48,7 @@
     <Compile Include="Common\Country.cs" />
     <Compile Include="Common\INameDescripton.cs" />
     <Compile Include="Common\Language.cs" />
+    <Compile Include="DataEntryCheckpoint.cs" />
     <Compile Include="DayType.cs" />
     <Compile Include="HolidaySchedule.cs" />
     <Compile Include="Interfaces\IBusinessEntity.cs" />

@@ -10,5 +10,7 @@ namespace Nostradabus.Persistence.Interfaces
 	public interface ICheckpointPersistence : IPersistence<Checkpoint>
 	{
 		List<Checkpoint> GetByRoute(Route route, DateTime fromDate, DateTime toDate);
+
+		int InsertDataEntryCheckpoint(DataEntryCheckpoint dataEntryCheckpoint);
 	}
 }

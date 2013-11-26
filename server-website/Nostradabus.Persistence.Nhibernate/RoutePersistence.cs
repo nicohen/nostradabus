@@ -28,7 +28,12 @@ namespace Nostradabus.Persistence.Nhibernate
 
 		public IList<int> GetLinesInBoundingBox(BoundingBox boundingBox)
 		{
-			throw new NotImplementedException();
+			return CurrentSession.GetNamedQuery("GetLinesInBoundingBox")
+				.SetDouble("MinLatitude", boundingBox.MinPoint.Latitude)
+				.SetDouble("MinLongitude", boundingBox.MinPoint.Longitude)
+				.SetDouble("MaxLatitude", boundingBox.MaxPoint.Latitude)
+				.SetDouble("MaxLongitude", boundingBox.MaxPoint.Longitude)
+				.List<int>();
 		}
 	}
 }

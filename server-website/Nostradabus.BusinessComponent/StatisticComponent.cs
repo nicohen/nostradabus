@@ -321,8 +321,14 @@ namespace Nostradabus.BusinessComponents
 				LoadSamplesFromCalculationDetails(samples, lastCalculationDetails);
 			}
 			
-			foreach (var route in RouteComponent.Instance.GetAll())
+			// get all route ids so we can get them complete (loading Stops prop)
+			var routeIds = RouteComponent.Instance.GetAll().Select(r => r.ID);
+
+			foreach (var routeId in routeIds)
 			{
+				// force to load Stops property of the route
+				var route = RouteComponent.Instance.GetById(routeId);
+
 				if(!samples.ContainsKey(route.ID)) samples.Add(route.ID, new RouteStatsSamples(route));
 
 				CalculateSamplesByRoute(samples[route.ID], route, fromDate, toDate);

@@ -8,6 +8,7 @@ using Nostradabus.BusinessComponents;
 using Nostradabus.BusinessComponents.Exceptions;
 using Nostradabus.BusinessEntities;
 using Nostradabus.BusinessEntities.Common;
+using Nostradabus.Common;
 using Nostradabus.WebSite.CustomActionResults;
 using Nostradabus.WebSite.Models;
 using Nostradabus.Website.Models;
@@ -29,11 +30,13 @@ namespace Nostradabus.Website.Controllers
 
 				#endregion Validations
 
-				var model = new NearbyLinesModel();
+				var model = new NearbyLinesModel {
+		           Lines = RouteComponent.Instance.GetNearbyLines(new GeoCoordinate(latitude.Value, longitude.Value)).ToArray()
+            	};
+				
+				#region Mock
 
-				// TODO: remove this and get line list from DB
-				// then call RouteComponent.GetNearbyLines()
-
+				/*
 				var rnd = new Random();
 				var responseSelector = rnd.Next(1, 7); // creates a number between 1 and 6
 				switch(responseSelector)
@@ -61,8 +64,10 @@ namespace Nostradabus.Website.Controllers
 					default:
 						model.Lines = new int[0];
 						break;
-				}
-				
+				}*/
+
+				#endregion
+
 				return new JsonActionResult(model);
 			}
 			catch (ValidationException ex)
@@ -97,6 +102,14 @@ namespace Nostradabus.Website.Controllers
 				if (!IsValidKeyCode(data)) throw new ValidationException("El keyCode es incorrecto.");
 				
 				#endregion Validations
+
+				CheckpointComponent.Instance.Add(new DataEntryCheckpoint{
+					SerialNumber = data.serialNumber,
+					LineNumber = data.line,
+					Coordinate = new GeoCoordinate(data.latitude.Value, data.longitude.Value),
+					UserDateTime = ParseUserDateTime(data.datetime),
+					DateTime = DateTimeHelper.Now()
+				});
 				
 				return new JsonActionResult(new JsonResponse(true));
 			}
@@ -112,6 +125,18 @@ namespace Nostradabus.Website.Controllers
 		
 		#region Private Methods
 
+		private static DateTime ParseUserDateTime(string datetime)
+		{
+			var year = Convert.ToInt32(datetime.Substring(0, 4));
+			var month = Convert.ToInt32(datetime.Substring(4, 2));
+			var day = Convert.ToInt32(datetime.Substring(6, 2));
+			var hours = Convert.ToInt32(datetime.Substring(8, 2));
+			var minutes = Convert.ToInt32(datetime.Substring(10, 2));
+			var seconds = Convert.ToInt32(datetime.Substring(12, 2));
+
+			return new DateTime(year, month, day, hours, minutes, seconds);
+		}
+
 		private static bool IsValidDateTime(string datetime)
 		{
 			if (string.IsNullOrEmpty(datetime)) return false;
@@ -120,14 +145,7 @@ namespace Nostradabus.Website.Controllers
 			
 			try
 			{
-				var year = Convert.ToInt32(datetime.Substring(0, 4));
-				var month = Convert.ToInt32(datetime.Substring(4, 2));
-				var day = Convert.ToInt32(datetime.Substring(6, 2));
-				var hours = Convert.ToInt32(datetime.Substring(8, 2));
-				var minutes = Convert.ToInt32(datetime.Substring(10, 2));
-				var seconds = Convert.ToInt32(datetime.Substring(12, 2));
-
-				new DateTime(year, month, day, hours, minutes, seconds);
+				ParseUserDateTime(datetime);
 
 				return true;
 			}

@@ -93,7 +93,7 @@ namespace Nostradabus.BusinessEntities
 
 		public override string ToString()
 		{
-			return String.Format("{0} - {1}: {2}", LineNumber, BranchCode, Description);
+			return String.Format("{0} - {1}: {2}", LineNumber, BranchCode, RouteDirection);
 		}
 
 		#endregion Overrides

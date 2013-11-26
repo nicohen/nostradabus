@@ -9,6 +9,8 @@
 
 	//StatisticComponent.Instance.CalculateStatistics();
 
+	var routes = RouteComponent.Instance.GetAll();
+
 	var selectedRoute = RouteComponent.Instance.GetRoute(Model.Line, Model.Branch, Model.RouteDirection == "going" ? Nostradabus.BusinessEntities.RouteDirection.Going : Nostradabus.BusinessEntities.RouteDirection.Return);
 
 	var checkpointFromRoute = CheckpointComponent.Instance.GetByRouteFromCache(selectedRoute).OrderBy(c => c.DateTime).ToList();
@@ -49,8 +51,8 @@
 {
 	<div>
 		Seleccione el recorrido para hacer las pruebas: 
-		@Html.DropDownListFor(m => m.Line, RouteComponent.Instance.GetAll().OrderBy(l => l.LineNumber).Select(l => new SelectListItem { Text = l.LineNumber.ToString(CultureInfo.InvariantCulture), Value = l.LineNumber.ToString(CultureInfo.InvariantCulture), Selected = l.LineNumber == Model.Line }))
-		@Html.DropDownListFor(m => m.Branch, new List<String> { "A", "B", "C" }.Select(b => new SelectListItem { Text = b, Value = b, Selected = b == Model.Branch }))
+		@Html.DropDownListFor(m => m.Line, routes.Select(r => r.LineNumber).Distinct().OrderBy(l => l).Select(l => new SelectListItem { Text = l.ToString(CultureInfo.InvariantCulture), Value = l.ToString(CultureInfo.InvariantCulture), Selected = l == Model.Line }))
+		@Html.DropDownListFor(m => m.Branch, routes.Select(r => r.BranchCode).Distinct().OrderBy(b => b).Select(b => new SelectListItem { Text = b, Value = b, Selected = b == Model.Branch }))
 		@Html.DropDownListFor(m => m.RouteDirection, new List<String> { "Going", "Return" }.Select(d => new SelectListItem { Text = d, Value = d.ToLower(), Selected = d.ToLower() == Model.RouteDirection }))
 	</div>
 

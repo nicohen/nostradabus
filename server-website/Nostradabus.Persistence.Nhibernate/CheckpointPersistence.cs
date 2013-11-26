@@ -18,5 +18,17 @@ namespace Nostradabus.Persistence.Nhibernate
 										   select c;
 			return query.ToList();
 		}
+
+		public int InsertDataEntryCheckpoint(DataEntryCheckpoint dataEntryCheckpoint)
+		{
+			return CurrentSession.GetNamedQuery("InsertDataEntryCheckpoint")
+				.SetString("SerialNumber", dataEntryCheckpoint.SerialNumber)
+				.SetInt32("LineNumber", dataEntryCheckpoint.LineNumber)
+				.SetDouble("Latitude", dataEntryCheckpoint.Coordinate.Latitude)
+				.SetDouble("Longitude", dataEntryCheckpoint.Coordinate.Longitude)
+				.SetDateTime("UserDate", dataEntryCheckpoint.UserDateTime)
+				.SetDateTime("Date", dataEntryCheckpoint.DateTime)
+				.UniqueResult<int>();
+		}
 	}
 }

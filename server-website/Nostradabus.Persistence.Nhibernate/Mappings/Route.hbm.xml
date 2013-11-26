@@ -12,19 +12,23 @@
 		<property name="Name" column="description" type="System.String" not-null="false"/>
 	</class>
 
-	<sql-query name="GetLinesInBoundingBox">
-		<query-param name="MinLatitude" type="Double"/>
-		<query-param name="MinLongitude" type="Double"/>
-		<query-param name="MaxLatitude" type="Double"/>
-		<query-param name="MaxLongitude" type="Double"/>
+	<sql-query name="GetLinesInBoundingBox" >
+		<return-scalar column="line_number" type="Int32"/>
+		<query-param name="MinLatitude" type="System.Double"/>
+		<query-param name="MinLongitude" type="System.Double"/>
+		<query-param name="MaxLatitude" type="System.Double"/>
+		<query-param name="MaxLongitude" type="System.Double"/>
 	
 		<![CDATA[
-		SELECT * FROM route_stop 
+		SELECT DISTINCT r.line_number 
+			FROM route_stop rs
+			INNER JOIN route r ON r.id = rs.route_id
 		WHERE 
-			latitude >= min_latitude AND 
-			latitude <= max_latitude AND 
-			longitude >= min_longitude AND 
-			longitude <= max_longitude
+			rs.latitude >= :MinLatitude AND 
+			rs.latitude <= :MaxLatitude AND 
+			rs.longitude >= :MinLongitude AND 
+			rs.longitude <= :MaxLongitude
+		ORDER BY r.line_number
 		]]>
 	</sql-query>
 </hibernate-mapping>

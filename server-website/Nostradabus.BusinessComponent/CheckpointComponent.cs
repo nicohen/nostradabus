@@ -6,7 +6,9 @@ using Nostradabus.BusinessComponents.Common;
 using Nostradabus.BusinessComponents.Exceptions;
 using Nostradabus.BusinessEntities;
 using Nostradabus.Persistence.Interfaces;
+using Nostradabus.Common.Logger;
 using Microsoft.Practices.ServiceLocation;
+using Nostradabus.Common;
 
 namespace Nostradabus.BusinessComponents
 {
@@ -8778,6 +8780,8 @@ new Checkpoint {UUID = "9", Route = new Route(22), Coordinate = new GeoCoordinat
 
 		#endregion Properties
 
+		#region Methods
+
 		public override ValidationSummary Validate(Checkpoint entity)
 		{
 			var result = new ValidationSummary();
@@ -8814,6 +8818,42 @@ new Checkpoint {UUID = "9", Route = new Route(22), Coordinate = new GeoCoordinat
 		{
 			return ServiceLocator.Current.GetInstance<ICheckpointPersistence>().GetByRoute(route, fromDate, toDate);
 		}
+
+		public DataEntryCheckpoint Add(DataEntryCheckpoint dataEntryCheckpoint)
+		{
+			#region Validations
+
+			if (string.IsNullOrEmpty(dataEntryCheckpoint.SerialNumber)) throw new ValidationException(Resources.BusinessComponents.Checkpoint.UUIDIsRequired);
+
+			if (dataEntryCheckpoint.UserDateTime == DateTime.MinValue) throw new ValidationException(Resources.BusinessComponents.Checkpoint.DateIsRequired);
+
+			#endregion Validations
+
+			dataEntryCheckpoint.DateTime = DateTimeHelper.Now();
+
+			try
+			{
+				var newId = Persistence<ICheckpointPersistence>().InsertDataEntryCheckpoint(dataEntryCheckpoint);
+
+				Persistence().CommitChanges();
+
+				return new DataEntryCheckpoint(newId)
+				{
+					LineNumber = dataEntryCheckpoint.LineNumber,
+					Coordinate = dataEntryCheckpoint.Coordinate,
+					UserDateTime = dataEntryCheckpoint.UserDateTime,
+					DateTime = dataEntryCheckpoint.DateTime
+				};
+			}
+			catch (Exception e)
+			{
+				Persistence().RollbackChanges();
+				LoggingManager.Logging.Error(e);
+				throw;
+			}
+		}
+
+		#endregion Methods
 
 		#region Cache - Testing
 

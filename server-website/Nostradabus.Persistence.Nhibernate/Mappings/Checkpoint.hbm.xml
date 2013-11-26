@@ -13,4 +13,24 @@
 		<property name="NextStopIndex" column="next_stop" type="System.Int32" not-null="true"/>
 		<property name="DateTime" column="date" type="System.DateTime" not-null="true"/>
 	</class>
+
+	<sql-query name="InsertDataEntryCheckpoint" >
+		<return-scalar column="new_id" type="Int32"/>
+		<query-param name="SerialNumber" type="System.String"/>
+		<query-param name="LineNumber" type="System.Int32"/>
+		<query-param name="Latitude" type="System.Double"/>
+		<query-param name="Longitude" type="System.Double"/>
+		<query-param name="UserDate" type="System.DateTime"/>
+		<query-param name="Date" type="System.DateTime"/>
+		<![CDATA[
+		INSERT INTO data_entry_checkpoint
+			(serial_number, line_number, latitude, longitude, user_date, date)
+		VALUES 
+			(:SerialNumber, :LineNumber, :Latitude, :Longitude, :UserDate, :Date);
+			
+		SELECT LAST_INSERT_ID() as new_id;
+		]]>
+	</sql-query>
+
+
 </hibernate-mapping>
